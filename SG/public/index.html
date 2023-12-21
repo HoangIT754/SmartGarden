@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Real-time Chart with Chart.js and Firebase</title>
+    <link href="style.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <!-- include Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+
+    <!-- include only the Firebase features as you need -->
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
+    <!-- Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <!-- Boostrap 5 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Boostrap icon -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
+    />
+  </head>
+  <body>
+    <!-- Form login -->
+    <div id="login-form-container" style="display: none">
+      <form id="login-form">
+        <div class="formLogin">
+          <h1>Login</h1>
+          <div class="input-box">
+            <input type="email" id="email" placeholder="Email" required />
+            <i class="bi bi-person-fill"></i>
+          </div>
+          <div class="input-box">
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              required
+            />
+            <i class="bi bi-lock-fill"></i>
+          </div>
+          <button type="submit" class="btn-login">login</button>
+        </div>
+      </form>
+    </div>
+    <div style="display: none" id="logged-in-elements">
+      <!-- Nav Bar -->
+      <div class="main-content">
+        <header>
+          <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <div class="container-fluid">
+              <div class="Logo">
+                <img src="img/ath-high-resolution-logo-white.png" alt="" />
+              </div>
+              <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mynavbar"
+              >
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="mynavbar">
+                <ul class="navbar-nav me-auto">
+                  <li class="nav-item">
+                    <a class="nav-link h5" href="javascript:void(0)">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link h5" href="javascript:void(0)"
+                      >About Us</a
+                    >
+                  </li>
+                </ul>
+                <form class="d-flex">
+                  <button id="logout-button" class="btn btn-primary">
+                    Logout
+                  </button>
+                </form>
+              </div>
+            </div>
+          </nav>
+        </header>
+        <!-- Main content -->
+        <div class="h1 text-center mt-5 mb-5 text-dark">Smart Garden</div>
+        <div class="clearButton">
+          <button id="clearDataButton" class="btn btn-primary">Clear Data</button>
+        </div>
+        <div class="container charts">
+          <!-- Temperature part -->
+          <div class="row">
+            <div class="col-md-8">
+              <h2>Teparature chart</h2>
+              <canvas id="chartTemperature" class="mb-5"></canvas>
+            </div>
+            <div class="col-md-4">
+              <h2>Temperature Data</h2>
+              <p class="value h1 text-primary" id="temperature">&#8451;</p>
+            </div>
+          </div>
+          <!-- Humidity Part -->
+          <div class="row">
+            <div class="col-md-4">
+              <h2>Humidity Data</h2>
+              <p class="value h1 text-primary" id="humidity">&#x25;</p>
+            </div>
+            <div class="col-md-8">
+              <h2>Humidity chart</h2>
+              <canvas id="chartHumanity" class="mb-5"></canvas>
+            </div>
+          </div>
+          <!-- Soil Part -->
+          <div class="row">
+            <div class="col-md-6">
+              <h2>Soil Chart</h2>
+              <canvas id="chartSoil" class="mb-5"></canvas>
+            </div>
+            <div class="col-md-3">
+              <h2>Soil Data</h2>
+              <p class="value h1 text-primary" id="dirtSoil">&#x25;</p>
+            </div>
+            <!-- LDR Part -->
+            <div class="col-md-3">
+              <h2>LDR Data</h2>
+              <p class="value h1" id="ldr"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Footer -->
+      <footer class="row bg-dark text-warning">
+        <h1 class="text-center mt-5 mb-3">About us</h1>
+        <div class="col-md-4 text-center">
+          <h2>Contact</h2>
+          <div><i class="bi bi-instagram"></i> Instagram</div>
+          <div><i class="bi bi-youtube"></i> Youtube</div>
+          <div><i class="bi bi-facebook"></i> Facebook</div>
+          <div><i class="bi bi-telegram"></i> Telegram</div>
+          <div>Phone Number: 84+ 0939 939 993</div>
+        </div>
+        <div class="col-md-4 text-center">
+          <h2>Branch</h2>
+          <div>123 Main Street, Anytown, USA</div>
+          <div>456 Elm Avenue, Cityville, Canada</div>
+          <div>789 Oak Lane, Villageland, Australia</div>
+          <div>321 Maple Drive, Townsville, United Kingdom</div>
+          <div>987 Pine Court, Hamletsville, New Zealand</div>
+        </div>
+        <div class="col-md-4 text-center">
+          <h2>Patner</h2>
+          <div>Acme Corporation</div>
+          <div>XYZ Industries</div>
+          <div>Global Solutions Ltd</div>
+          <div>Innovate Tech</div>
+        </div>
+        <div class="text-center mt-5 text-white">
+          copying right@2023 ATH Smart Garden
+        </div>
+      </footer>
+    </div>
+    <script src="app.js"></script>
+    <script src="auth.js"></script>
+  </body>
+</html>
